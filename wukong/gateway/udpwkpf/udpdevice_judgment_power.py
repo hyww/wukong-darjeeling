@@ -14,8 +14,8 @@ class Judgment_Power(WuClass):
         self.status = True
         self.wait = 0
         self.result = True
-        self.threshold = 40 # if avg below this, should shutdown in this interval
-        self.conThres = 4 # how many consecutive shutdown interval we need to really shutdown
+        self.threshold = 10 # if avg below this, should shutdown in this interval
+        self.conThres = 8 # how many consecutive shutdown interval we need to really shutdown
         with open('drinkdata.csv','r') as fin:
             cin = csv.reader(fin)
             csvdata =  [ row for row in cin][1:]
@@ -85,7 +85,13 @@ class Judgment_Power(WuClass):
         obj.setProperty(2,msg)
         obj.setProperty(3,msg)
 
-        obj.setProperty(4,"Status:"+str(self.status)+"\n"+"Prefer"+str(self.result))
+        s = 0
+        if self.status:
+            s = s^2
+        if self.result:
+            s = s^1
+        print s
+        obj.setProperty(4,s)
 
 if __name__ == "__main__":
     class MyDevice(Device):

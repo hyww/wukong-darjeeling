@@ -64,21 +64,15 @@ if __name__ == "__main__":
             self.loadClass('Grove_LCD')
             self.myLcd = grove_lcd(0x3E, 0x62)
             print "LCD Actuator init success"
-            self.state = LOW
+            self.state = HIGH
             self.previous = LOW
             self.time = 0
             self.debounce = 200
-            self.cleanup = True
 
         def update(self,obj,pID,val):
             on_off = obj.getProperty(0)
             currentTime = int(time.time() * 100)
             if (on_off == HIGH and self.previous == LOW and currentTime - self.time > self.debounce):
-                if (self.state == HIGH):
-                    self.state = LOW
-                    self.cleanup = False
-                else:
-                    self.state = HIGH
                 self.time = currentTime
             if self.state:
                 display_value = obj.getProperty(1)
@@ -89,7 +83,19 @@ if __name__ == "__main__":
  
                 red, green, blue = [int((x / 255.0) * bri) for x in HSV_2_RGB((hue, saturation, value))]
                 grove_set_color(self.myLcd, red, green, blue)
-                grove_set_text(self.myLcd, str(display_value))
+                s = "Status:"
+                if display_value & 2:
+                    s+= "On"
+                else:
+                    s+= "Off"
+                s+= "("
+                if display_value & 1:
+                    s+= "On)     "
+                else:
+                    s+= "Off)    "
+                print s
+
+                grove_set_text(self.myLcd, s)
                 print "display value: %d" % display_value
             else:
                 if not self.cleanup:

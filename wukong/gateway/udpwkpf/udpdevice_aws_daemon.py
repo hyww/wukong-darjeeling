@@ -55,11 +55,11 @@ if __name__ == "__main__":
             if pID == 3:
                 print pID
                 msg = json.dumps({'data': val})
-                self.myMQTTClient.publish('Device/'+str(self.id-1)+'/R/Recv/'+str(self.dataNo), msg, 0)
+                self.myMQTTClient.publish('Device/'+str((self.id+2)%3)+'/R/Recv/'+str(self.dataNo), msg, 0)
             if pID == 4:
                 print pID
                 msg = json.dumps({'data': val})
-                self.myMQTTClient.publish('Device/'+str(self.id+1)+'/L/Recv/'+str(self.dataNo), msg, 0)
+                self.myMQTTClient.publish('Device/'+str((self.id+1)%3)+'/L/Recv/'+str(self.dataNo), msg, 0)
 
     class MyDevice(Device):
         def __init__(self,addr,localaddr):

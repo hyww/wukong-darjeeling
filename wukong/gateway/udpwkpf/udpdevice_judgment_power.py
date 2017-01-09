@@ -71,19 +71,19 @@ class Judgment_Power(WuClass):
             if self.wait>0:
                 self.wait-= 1
             
-        left = obj.getProperty(0)
-        right = obj.getProperty(1)
+            left = obj.getProperty(0)
+            right = obj.getProperty(1)
 
-        msg = self.status
-        if msg and not self.result and self.wait == 0:
-            msg = False
-            if not left and not right:
-                self.wait = random.randint(1, 100)
-            else:
-                self.status = False
-        print msg
-        obj.setProperty(2,msg)
-        obj.setProperty(3,msg)
+            msg = self.status
+            if msg and not self.result and self.wait == 0:
+                msg = False
+                if not left and not right:
+                    self.wait = random.randint(1, 100)
+                else:
+                    self.status = False
+            print msg
+            obj.setProperty(2,msg)
+            obj.setProperty(3,msg)
 
         s = 0
         if self.status:

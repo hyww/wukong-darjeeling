@@ -500,6 +500,7 @@
         <property name="left_signal" access="readwrite" datatype="boolean" default="false"/>
         <property name="right_signal" access="readwrite" datatype="boolean" default="false"/>
         <property name="refresh_rate" access="readwrite" datatype="refresh_rate" default="50"  />
+        <property name="data_no" access="readwrite" datatype="short" default="0"  />
     </WuClass>
 
 

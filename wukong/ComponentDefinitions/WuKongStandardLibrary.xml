@@ -147,6 +147,15 @@
         <property name="right_danger_out" access="readonly" datatype="boolean" default="false"  />
         <property name="pattern" access="readonly" datatype="short" default="0"  />
     </WuClass>
+    <WuClass name="Judgment_Power" id="19" virtual="false" type="hard">	
+        <property name="left_watercooler_msg" access="writeonly" datatype="boolean" default="false"  />
+        <property name="right_watercooler_msg" access="writeonly" datatype="boolean" default="false"  />
+        <property name="inform_left_watercooler" access="readonly" datatype="boolean" default="false"  />
+        <property name="inform_right_watercooler" access="readonly" datatype="boolean" default="false"  />
+	<property name="how_display" access="readonly" datatype="short" default="0"  />
+	<property name="time_to_cutoff" access="readonly" datatype="short" default="0" />
+	<property name="refresh_rate" access="readwrite" datatype="refresh_rate" default="10" />
+    </WuClass>
 
     <!-- Sensors -->
     <WuClass name="Light_Sensor" id="1001" virtual="false" type="hard">

@@ -15,7 +15,7 @@ class Judgment_Power(WuClass):
         self.wait = 0
         self.result = True
         self.threshold = 10 # if avg below this, should shutdown in this interval
-        self.conThres = 8 # how many consecutive shutdown interval we need to really shutdown
+        self.conThres = 6 # how many consecutive shutdown interval we need to really shutdown
         with open('drinkdata.csv','r') as fin:
             cin = csv.reader(fin)
             csvdata =  [ row for row in cin][1:]

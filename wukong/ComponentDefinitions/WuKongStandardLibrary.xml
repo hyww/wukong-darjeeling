@@ -154,7 +154,7 @@
         <property name="inform_right_watercooler" access="readonly" datatype="boolean" default="false"  />
 	<property name="how_display" access="readonly" datatype="short" default="0"  />
         <property name="control_relay" access="readwrite" datatype="boolean" default="true"  />
-	<property name="refresh_rate" access="readwrite" datatype="refresh_rate" default="5" />
+	<property name="refresh_rate" access="readwrite" datatype="refresh_rate" default="20" />
     </WuClass>
 
     <!-- Sensors -->

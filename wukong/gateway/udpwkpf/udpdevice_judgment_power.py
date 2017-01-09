@@ -90,6 +90,10 @@ class Judgment_Power(WuClass):
             s = s^2
         if self.result:
             s = s^1
+        if left:
+            s = s^4
+        if right:
+            s = s^8
         print s
         obj.setProperty(4,s)
         obj.setProperty(5,self.status)

@@ -83,16 +83,21 @@ if __name__ == "__main__":
  
                 red, green, blue = [int((x / 255.0) * bri) for x in HSV_2_RGB((hue, saturation, value))]
                 grove_set_color(self.myLcd, red, green, blue)
-                s = "Status:"
+                s = ""
                 if display_value & 2:
                     s+= "On"
                 else:
                     s+= "Off"
                 s+= "("
                 if display_value & 1:
-                    s+= "On)     "
+                    s+= "On)"
                 else:
-                    s+= "Off)    "
+                    s+= "Off)"
+                if display_value & 4:
+                    s+= "<-"
+                if display_value & 8:
+                    s+= "->"
+                s+= "                "
                 print s
 
                 grove_set_text(self.myLcd, s)

@@ -92,6 +92,7 @@ class Judgment_Power(WuClass):
             s = s^1
         print s
         obj.setProperty(4,s)
+        obj.setProperty(5,self.status)
 
 if __name__ == "__main__":
     class MyDevice(Device):

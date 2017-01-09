@@ -19,12 +19,10 @@ class Judgment_Power(WuClass):
         with open('drinkdata.csv','r') as fin:
             cin = csv.reader(fin)
             csvdata =  [ row for row in cin][1:]
-            print csvdata
             data = [{'sum':0,'num':0} for i in range(48)]
             for i in range(len(csvdata)):
                 data[int(csvdata[i][1])]['sum'] += int(csvdata[i][2])
                 data[int(csvdata[i][1])]['num'] += 1
-            print data
             self.avgData = list(map(lambda x:x['sum']/x['num'],data))
             self.conData = []
             last = False

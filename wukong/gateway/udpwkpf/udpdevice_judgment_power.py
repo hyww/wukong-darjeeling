@@ -9,46 +9,30 @@ class Judgment_Power(WuClass):
         WuClass.__init__(self)
         self.loadClass('Judgment_Power')
         self.intervalNum = 0
-        self.power_offTime =self.Power_Off(0)
-        self.power_onTime = self.Power_On()
+        with open('drinkdata.csv','r') as fin:
+            cin = csv.reader(fin)
+            csvdata =  [ row for row in cin][1:]
+            data = [{'sum':0,'num':0} for i in range(48)]
+            for i in range(len(csvdata)):
+                if i == 0:
+                    continue # skip column name
+                data[int(csvdata[i][1])]['sum'] += int(csvdata[i][2])
+                data[int(csvdata[i][1])]['num'] += 1
+            self.avgData = list(map(lambda x:x['sum']/x['num'],data))
+            print self.avgData
+
         print "Judgment Power init success"
 
-    def Power_Off(self,onFlg):    
-       self. power_offCnt = 0
-       self. checkContinueZero = 0
-       with open('drinkdata.csv','rt') as fin:
-	   cin = csv.reader(fin)
-	   test = [row for row in cin]
+    def judge(self):
+        if self.avgData[self.intervalNum] > 40:
+            return 1
+        else:
+            return 0
 
-       for column in test[1:]:
-          if int(column[2]) == 0 or int(column[2]) == 1:
-            self.checkContinueZero = 1
-            self.power_offCnt += 1
-            if self.power_offCnt == 1:
-	      self.power_offTime = column[1]
-	  else:
-	    if self.power_offCnt >= 8 and onFlg == 1:
-	      return column[1]
-	    self.checkContinueZero = 0
-            self.power_offCnt = 0
-
-	  if self.power_offCnt == 8 and self.checkContinueZero == 1 and onFlg == 0:
-	    return int(self.power_offTime)
-
-    def Power_On(self):
-       self.power_onTime =self.Power_Off(1)
-       print(self.power_onTime)  
- 
     def update(self,obj,pID,val):
-        print(self.intervalNum)
         self.intervalNum += 1
         self.intervalNum = self.intervalNum % 48
-        if self.intervalNum == self.power_offTime:
-          obj.setProperty(5,0)
-        
-        if self.intervalNum == self.power_onTime:
-          obj.setProperty(5,1)
-        
+        obj.setProperty(4,self.judge())
 
 if __name__ == "__main__":
     class MyDevice(Device):

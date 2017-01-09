@@ -60,7 +60,7 @@ class Judgment_Power(WuClass):
 
     def update(self,obj,pID=None,val=None):
         # update by refreshrate
-        print "pID:",pID,"counter:",self.counter,"interval:",self.intervalNum,"status:",self.status,"result:",self.result
+        print "pID:",pID,"counter:",self.counter,"interval:",self.intervalNum,"status:",self.status,"result:",self.result,"wait",self.wait
         if pID == None:
             if self.counter == 100:
                 self.intervalNum += 1
@@ -70,19 +70,20 @@ class Judgment_Power(WuClass):
                 self.wait = 0
                 self.counter = 0
             self.counter+= 1
-            self.wait-= 1
+            if self.wait>0:
+                self.wait-= 1
             
         left = obj.getProperty(0)
         right = obj.getProperty(1)
 
         msg = self.status
         if msg and not self.result and self.wait == 0:
+            msg = False
             if not left and not right:
                 self.wait = random.randint(1, 100)
             else:
-                if pID == 0 or pID == 1:
-                    self.status = False
-                msg = False
+                self.status = False
+        print msg
         obj.setProperty(2,msg)
         obj.setProperty(3,msg)
 

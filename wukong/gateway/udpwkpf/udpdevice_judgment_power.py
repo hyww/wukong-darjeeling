@@ -9,6 +9,8 @@ class Judgment_Power(WuClass):
         WuClass.__init__(self)
         self.loadClass('Judgment_Power')
         self.intervalNum = 0
+        self.threshold = 40 # if avg below this, should shutdown in this interval
+        self.conThres = 4 # how many consecutive shutdown interval we need to really shutdown
         with open('drinkdata.csv','r') as fin:
             cin = csv.reader(fin)
             csvdata =  [ row for row in cin][1:]
@@ -19,15 +21,37 @@ class Judgment_Power(WuClass):
                 data[int(csvdata[i][1])]['sum'] += int(csvdata[i][2])
                 data[int(csvdata[i][1])]['num'] += 1
             self.avgData = list(map(lambda x:x['sum']/x['num'],data))
-            print self.avgData
+            self.conData = []
+            last = False
+            con = 1
+            for i in range(48):
+                if i == 0:
+                    last = (self.avgData[i] >= self.threshold)
+                elif last == (self.avgData[i] >= self.threshold):
+                    con+= 1
+                else:
+                    #print last, con
+                    if (not last) and con >= self.conThres:
+                        self.conData+= [False for j in range(con)]
+                    else:
+                        self.conData+= [True for j in range(con)]
+                    con = 1
+                    last = (self.avgData[i] >= self.threshold)
+            #print last, con
+            if (not last) and con >= self.conThres:
+                self.conData+= [False for j in range(con)]
+            else:
+                self.conData+= [True for j in range(con)]
+            #print self.conData, len(self.conData)
 
         print "Judgment Power init success"
 
     def judge(self):
-        if self.avgData[self.intervalNum] > 40:
-            return 1
+        #if self.avgData[self.intervalNum] >= self.threshold:
+        if self.conData[self.intervalNum]:
+            return True
         else:
-            return 0
+            return False
 
     def update(self,obj,pID,val):
         self.intervalNum += 1

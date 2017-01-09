@@ -19,12 +19,12 @@ class Judgment_Power(WuClass):
         with open('drinkdata.csv','r') as fin:
             cin = csv.reader(fin)
             csvdata =  [ row for row in cin][1:]
+            print csvdata
             data = [{'sum':0,'num':0} for i in range(48)]
             for i in range(len(csvdata)):
-                if i == 0:
-                    continue # skip column name
                 data[int(csvdata[i][1])]['sum'] += int(csvdata[i][2])
                 data[int(csvdata[i][1])]['num'] += 1
+            print data
             self.avgData = list(map(lambda x:x['sum']/x['num'],data))
             self.conData = []
             last = False
@@ -87,7 +87,7 @@ class Judgment_Power(WuClass):
         obj.setProperty(2,msg)
         obj.setProperty(3,msg)
 
-        obj.setProperty(4,self.status)
+        obj.setProperty(4,"Status:"+str(self.status)+"\n"+"Prefer"+str(self.result))
 
 if __name__ == "__main__":
     class MyDevice(Device):

@@ -3,12 +3,17 @@ from udpwkpf import WuClass, Device
 import sys
 import csv
 import datetime
+import random
 
 class Judgment_Power(WuClass):
     def __init__(self):
         WuClass.__init__(self)
         self.loadClass('Judgment_Power')
         self.intervalNum = 0
+        self.counter = 0
+        self.status = True
+        self.wait = 0
+        self.result = True
         self.threshold = 40 # if avg below this, should shutdown in this interval
         self.conThres = 4 # how many consecutive shutdown interval we need to really shutdown
         with open('drinkdata.csv','r') as fin:
@@ -53,10 +58,35 @@ class Judgment_Power(WuClass):
         else:
             return False
 
-    def update(self,obj,pID,val):
-        self.intervalNum += 1
-        self.intervalNum = self.intervalNum % 48
-        obj.setProperty(4,self.judge())
+    def update(self,obj,pID=None,val=None):
+        # update by refreshrate
+        print "pID:",pID,"counter:",self.counter,"interval:",self.intervalNum,"status:",self.status,"result:",self.result
+        if pID == None:
+            if self.counter == 100:
+                self.intervalNum += 1
+                self.intervalNum = self.intervalNum % 48
+                self.result = self.judge()
+                self.status = self.status or self.result
+                self.wait = 0
+                self.counter = 0
+            self.counter+= 1
+            self.wait-= 1
+            
+        left = obj.getProperty(0)
+        right = obj.getProperty(1)
+
+        msg = self.status
+        if msg and not self.result and self.wait == 0:
+            if not left and not right:
+                self.wait = random.randint(1, 100)
+            else:
+                if pID == 0 or pID == 1:
+                    self.status = False
+                msg = False
+        obj.setProperty(2,msg)
+        obj.setProperty(3,msg)
+
+        obj.setProperty(4,self.status)
 
 if __name__ == "__main__":
     class MyDevice(Device):
